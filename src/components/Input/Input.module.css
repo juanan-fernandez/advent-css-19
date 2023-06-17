@@ -1,0 +1,22 @@
+/* - Primary (blue) - #1400FF
+- Light Gray - #D4D4D4
+- Dark Gray (icons) - #757575
+- Errors (red) - #FF0000
+- Success (green) - #5FA12B */
+
+:root {
+	--background-label: white;
+	--primary-blue: #1400ff;
+	--error-red: #ff0000;
+}
+
+.error {
+	color: var(--error-red);
+	font-size: 0.7rem;
+}
+
+.input-label {
+	background-color: var(--background-label);
+	color: var(--primary-blue);
+	position: absolute;
+}
