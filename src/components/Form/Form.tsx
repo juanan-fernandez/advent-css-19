@@ -16,7 +16,7 @@ export default function Form() {
 					type='text'
 					inputName='name'
 					messageOnError='Please enter a valid name'
-					validationFn={() => validateName('')}
+					validationFn={validateName}
 				/>
 			</form>
 		</section>

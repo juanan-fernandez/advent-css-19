@@ -14,12 +14,14 @@
 .error {
 	color: var(--error-red);
 	font-size: 0.7rem;
+	margin-left: 0.5rem;
 }
 
 .input__control {
 	position: relative;
 	display: flex;
 	justify-content: start;
+	align-items: center;
 }
 
 .input__control:focus-within label {

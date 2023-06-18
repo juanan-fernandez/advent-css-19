@@ -8,8 +8,10 @@ type InputProps = {
 	inputLabel: string;
 	placeholder: string;
 	messageOnError: string;
-	validationFn?: (inputVal: string | number | null) => boolean;
+	validationFn(inputVal: string | number | null | undefined): boolean;
 };
+
+//inputVal:
 
 export default function Input(props: InputProps) {
 	const {
@@ -24,17 +26,15 @@ export default function Input(props: InputProps) {
 
 	const [isValid, setIsValid] = useState(false);
 	const [isDirty, setIsDirty] = useState(false);
-	const inputRef = useRef(null);
+	const inputRef = useRef<HTMLInputElement>(null);
 
 	const validateInput = () => {
 		let validInput = true;
 		if (validationFn && typeof validationFn === 'function') {
-			console.log(inputRef.current.value);
-
 			validInput =
 				type === 'number'
-					? validationFn(Number(inputRef.current.value))
-					: validationFn(inputRef.current.value);
+					? validationFn(Number(inputRef.current?.value))
+					: validationFn(inputRef.current?.value);
 		}
 		setIsValid(validInput);
 		setIsDirty(true);
@@ -54,9 +54,11 @@ export default function Input(props: InputProps) {
 				className={styles.input__input}
 				ref={inputRef}
 			/>
-			{!isValid && isDirty ? <p className={styles.error}>{messageOnError}</p> : null}
+			{!isValid && isDirty ? (
+				<p className={`${styles.icon} ${styles.error}`}>{messageOnError}</p>
+			) : null}
 			{isValid ? (
-				<div className='success'>
+				<div className={styles.icon}>
 					<img src='success.svg' />
 				</div>
 			) : null}
