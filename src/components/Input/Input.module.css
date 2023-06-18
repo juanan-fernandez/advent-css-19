@@ -5,6 +5,7 @@
 - Success (green) - #5FA12B */
 
 :root {
+	--border-input: #d4d4d4;
 	--background-label: white;
 	--primary-blue: #1400ff;
 	--error-red: #ff0000;
@@ -15,8 +16,34 @@
 	font-size: 0.7rem;
 }
 
-.input-label {
+.input__control {
+	position: relative;
+	display: flex;
+	justify-content: start;
+}
+
+.input__control:focus-within label {
+	opacity: 1;
+}
+
+.input__input {
+	border: 1px solid var(--border-input);
+	font-size: 1.5rem;
+	padding: 0.8em;
+}
+
+.input__input:focus {
+	border: none;
+	outline: 2px solid var(--primary-blue);
+	background-color: white;
+}
+
+.input__label {
 	background-color: var(--background-label);
 	color: var(--primary-blue);
+	padding: 0.4rem;
 	position: absolute;
+	left: 13px;
+	top: -18px;
+	opacity: 0;
 }
