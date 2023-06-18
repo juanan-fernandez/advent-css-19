@@ -2,7 +2,7 @@ import styles from './Input.module.css';
 import { useState, useRef } from 'react';
 
 type InputProps = {
-	type: 'text' | 'number';
+	type: 'text' | 'number' | 'password';
 	inputName: string;
 	inputId: string;
 	inputLabel: string;

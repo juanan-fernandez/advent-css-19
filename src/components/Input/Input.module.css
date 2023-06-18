@@ -11,10 +11,13 @@
 	--error-red: #ff0000;
 }
 
+.icon {
+	margin-left: 0.5rem;
+	font-size: 0.7rem;
+}
+
 .error {
 	color: var(--error-red);
-	font-size: 0.7rem;
-	margin-left: 0.5rem;
 }
 
 .input__control {
@@ -22,6 +25,7 @@
 	display: flex;
 	justify-content: start;
 	align-items: center;
+	margin: 1.2rem auto;
 }
 
 .input__control:focus-within label {
@@ -30,8 +34,16 @@
 
 .input__input {
 	border: 1px solid var(--border-input);
-	font-size: 1.5rem;
-	padding: 0.8em;
+	font-size: 1.4rem;
+	padding: 0.7rem;
+}
+
+.input__input[type='password'] {
+	background: url('/show.svg') no-repeat right 10px center;
+}
+
+.input__input::placeholder {
+	color: var(--primary-blue);
 }
 
 .input__input:focus {
@@ -43,9 +55,9 @@
 .input__label {
 	background-color: var(--background-label);
 	color: var(--primary-blue);
-	padding: 0.4rem;
+	padding: 0rem 0.5rem 0rem 0.1rem;
 	position: absolute;
 	left: 13px;
-	top: -18px;
+	top: -13px;
 	opacity: 0;
 }
