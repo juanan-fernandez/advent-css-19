@@ -11,13 +11,14 @@
 	--error-red: #ff0000;
 }
 
-.icon {
-	margin-left: 0.5rem;
-	font-size: 0.7rem;
-}
-
-.error {
-	color: var(--error-red);
+.input__row_container {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	margin: 1.2rem auto;
+	width: 75%;
 }
 
 .input__control {
@@ -25,7 +26,7 @@
 	display: flex;
 	justify-content: start;
 	align-items: center;
-	margin: 1.2rem auto;
+	width: 60%;
 }
 
 .input__control:focus-within label {
@@ -36,10 +37,14 @@
 	border: 1px solid var(--border-input);
 	font-size: 1.4rem;
 	padding: 0.7rem;
+	width: 100%;
 }
 
-.input__input[type='password'] {
-	background: url('/show.svg') no-repeat right 10px center;
+.input__control--icon {
+	position: absolute;
+	opacity: 0.6;
+	right: 10px;
+	cursor: pointer;
 }
 
 .input__input::placeholder {
@@ -60,4 +65,18 @@
 	left: 13px;
 	top: -13px;
 	opacity: 0;
+}
+
+.success_error {
+	width: 40%;
+	text-align: start;
+}
+
+.icon {
+	margin-left: 0.6rem;
+	font-size: 0.7rem;
+}
+
+.error {
+	color: var(--error-red);
 }

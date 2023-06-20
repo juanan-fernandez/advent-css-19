@@ -26,7 +26,19 @@ export default function Input(props: InputProps) {
 
 	const [isValid, setIsValid] = useState(false);
 	const [isDirty, setIsDirty] = useState(false);
+	const [lostFocus, setLostFocus] = useState(false);
+	const [hideShow, setHideShow] = useState('show.svg');
+	const [inputType, setInputType] = useState(type);
 	const inputRef = useRef<HTMLInputElement>(null);
+
+	const onHideShowAction = () => {
+		setHideShow(prev => {
+			return prev === 'show.svg' ? 'hide.svg' : 'show.svg';
+		});
+		setInputType(prev => {
+			return prev === 'text' ? 'password' : 'text';
+		});
+	};
 
 	const validateInput = () => {
 		let validInput = true;
@@ -36,32 +48,53 @@ export default function Input(props: InputProps) {
 					? validationFn(Number(inputRef.current?.value))
 					: validationFn(inputRef.current?.value);
 		}
+		setLostFocus(true);
 		setIsValid(validInput);
+	};
+
+	const handleChange = () => {
 		setIsDirty(true);
 	};
 
+	const handleFocus = () => {
+		setLostFocus(false);
+	};
+
 	return (
-		<div className={styles.input__control}>
-			<label className={styles.input__label} htmlFor={inputName}>
-				{inputLabel}
-			</label>
-			<input
-				name={inputName}
-				id={inputId}
-				type={type}
-				placeholder={placeholder}
-				onBlur={validateInput}
-				className={styles.input__input}
-				ref={inputRef}
-			/>
-			{!isValid && isDirty ? (
-				<p className={`${styles.icon} ${styles.error}`}>{messageOnError}</p>
-			) : null}
-			{isValid ? (
-				<div className={styles.icon}>
-					<img src='success.svg' />
-				</div>
-			) : null}
+		<div className={styles.input__row_container}>
+			<div className={styles.input__control}>
+				<label className={styles.input__label} htmlFor={inputName}>
+					{inputLabel}
+				</label>
+				{type === 'password' ? (
+					<img
+						src={`/${hideShow}`}
+						className={styles['input__control--icon']}
+						onClick={onHideShowAction}
+					/>
+				) : null}
+				<input
+					name={inputName}
+					id={inputId}
+					type={inputType}
+					placeholder={placeholder}
+					onBlur={validateInput}
+					onChange={handleChange}
+					onFocus={handleFocus}
+					className={styles.input__input}
+					ref={inputRef}
+				/>
+			</div>
+			<div className={styles.success_error}>
+				{!isValid && isDirty && lostFocus ? (
+					<p className={`${styles.icon} ${styles.error}`}>{messageOnError}</p>
+				) : null}
+				{isValid ? (
+					<div className={styles.icon}>
+						<img src='success.svg' />
+					</div>
+				) : null}
+			</div>
 		</div>
 	);
 }

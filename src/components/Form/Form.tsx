@@ -6,7 +6,6 @@ export default function Form() {
 	const [passwordConfirmValue, setPasswordConfirmValue] = useState('');
 
 	const validateName = (name: string): boolean => {
-		console.log(name);
 		return name.trim().length > 4;
 	};
 
@@ -37,7 +36,7 @@ export default function Form() {
 	};
 
 	return (
-		<section>
+		<section style={{ width: '100%' }}>
 			<form>
 				<Input
 					placeholder='Name'
