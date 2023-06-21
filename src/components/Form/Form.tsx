@@ -1,9 +1,19 @@
+import styles from './Form.module.css';
 import { useState } from 'react';
 import Input from '../Input/Input';
+import Button from '../Button/Button';
 
 export default function Form() {
 	const [passwordValue, setPasswordValue] = useState('');
 	const [passwordConfirmValue, setPasswordConfirmValue] = useState('');
+
+	const updatePassword = (passValue: string): void => {
+		setPasswordValue(passValue);
+	};
+
+	const updatePasswordConfirm = (passConfirmValue: string): void => {
+		setPasswordConfirmValue(passConfirmValue);
+	};
 
 	const validateName = (name: string): boolean => {
 		return name.trim().length > 4;
@@ -32,12 +42,19 @@ export default function Form() {
 	};
 
 	const validatePasswordConfirmation = (password: string): boolean => {
-		return validatePassword(password) && passwordValue === passwordConfirmValue;
+		console.log({ passwordValue, passwordConfirmValue });
+
+		return validatePassword(password) && passwordValue === password;
+	};
+
+	const handleSubmitForm = (event: React.SyntheticEvent) => {
+		event.preventDefault();
+		console.log('submit');
 	};
 
 	return (
-		<section style={{ width: '100%' }}>
-			<form>
+		<section>
+			<form onSubmit={handleSubmitForm}>
 				<Input
 					placeholder='Name'
 					inputId='name'
@@ -64,6 +81,7 @@ export default function Form() {
 					inputName='email'
 					messageOnError='Password length must be 6 characters at least and only include letters and numbers'
 					validationFn={validatePassword}
+					onPasswordInput={updatePassword}
 				/>
 				<Input
 					placeholder='Password confirm'
@@ -73,7 +91,9 @@ export default function Form() {
 					inputName='password-confirm'
 					messageOnError='Password confirmation is not equal to password'
 					validationFn={validatePasswordConfirmation}
+					onPasswordInput={updatePasswordConfirm}
 				/>
+				<Button>Submit</Button>
 			</form>
 		</section>
 	);
