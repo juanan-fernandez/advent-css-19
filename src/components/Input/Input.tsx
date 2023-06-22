@@ -9,7 +9,7 @@ type InputProps = {
 	placeholder: string;
 	messageOnError: string;
 	validationFn?(inputVal: string | number | null | undefined): boolean;
-	onPasswordInput?(inputVal: string): void;
+	updateValueFn?(inputVal: string | number | null, inputName: string): void;
 };
 
 //inputVal:
@@ -19,7 +19,7 @@ export default function Input(props: InputProps) {
 		type,
 		placeholder,
 		validationFn,
-		onPasswordInput,
+		updateValueFn,
 		inputName,
 		inputId,
 		inputLabel,
@@ -45,8 +45,8 @@ export default function Input(props: InputProps) {
 	const validateInput = () => {
 		let validInput = true;
 
-		if (onPasswordInput && typeof onPasswordInput === 'function' && inputRef.current) {
-			onPasswordInput(inputRef.current?.value);
+		if (updateValueFn && typeof updateValueFn === 'function' && inputRef.current) {
+			updateValueFn(inputRef.current?.value, inputName);
 		}
 
 		if (validationFn && typeof validationFn === 'function') {

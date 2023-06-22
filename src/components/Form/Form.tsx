@@ -1,19 +1,39 @@
-import styles from './Form.module.css';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Input from '../Input/Input';
 import Button from '../Button/Button';
 
+type ValidInputTypes = string | number | null;
+
 export default function Form() {
-	const [passwordValue, setPasswordValue] = useState('');
-	const [passwordConfirmValue, setPasswordConfirmValue] = useState('');
+	// const [name, setName] = useState<ValidInputTypes>('');
+	// const [mail, setMail] = useState<ValidInputTypes>('');
+	// const [passwordValue, setPasswordValue] = useState<ValidInputTypes>('');
+	// const [passwordConfirmValue, setPasswordConfirmValue] = useState<ValidInputTypes>('');
 
-	const updatePassword = (passValue: string): void => {
-		setPasswordValue(passValue);
+	const nameRef = useRef<ValidInputTypes>(null);
+	const mailRef = useRef<ValidInputTypes>(null);
+	const passwordRef = useRef<ValidInputTypes>(null);
+	const passwordConfirmRef = useRef<ValidInputTypes>(null);
+
+	const updateValue = (inputValue: ValidInputTypes, inputName: string): void => {
+		// if (inputName === 'name') setName(inputValue);
+		// if (inputName === 'mail') setMail(inputValue);
+		// if (inputName === 'password') setPasswordValue(inputValue);
+		// if (inputName === 'passwordConfirm') setPasswordConfirmValue(inputValue)
+
+		if (inputName === 'name') nameRef.current = inputValue;
+		if (inputName === 'mail') mailRef.current = inputValue;
+		if (inputName === 'password') passwordRef.current = inputValue;
+		if (inputName === 'passwordConfirm') passwordConfirmRef.current = inputValue;
 	};
 
-	const updatePasswordConfirm = (passConfirmValue: string): void => {
-		setPasswordConfirmValue(passConfirmValue);
-	};
+	// const updatePassword = (passValue: string): void => {
+	// 	setPasswordValue(passValue);
+	// };
+
+	// const updatePasswordConfirm = (passConfirmValue: string): void => {
+	// 	setPasswordConfirmValue(passConfirmValue);
+	// };
 
 	const validateName = (name: string): boolean => {
 		return name.trim().length > 4;
@@ -42,9 +62,9 @@ export default function Form() {
 	};
 
 	const validatePasswordConfirmation = (password: string): boolean => {
-		console.log({ passwordValue, passwordConfirmValue });
+		console.log({ passwordRef, passwordConfirmRef });
 
-		return validatePassword(password) && passwordValue === password;
+		return validatePassword(password) && passwordRef.current === password;
 	};
 
 	const handleSubmitForm = (event: React.SyntheticEvent) => {
@@ -54,7 +74,7 @@ export default function Form() {
 
 	return (
 		<section>
-			<form onSubmit={handleSubmitForm}>
+			<form onSubmit={handleSubmitForm} autoComplete='off'>
 				<Input
 					placeholder='Name'
 					inputId='name'
@@ -63,6 +83,7 @@ export default function Form() {
 					inputName='name'
 					messageOnError='Please enter a valid name'
 					validationFn={validateName}
+					updateValueFn={updateValue}
 				/>
 				<Input
 					placeholder='E-mail'
@@ -78,20 +99,20 @@ export default function Form() {
 					inputId='password'
 					type='password'
 					inputLabel='Password'
-					inputName='email'
+					inputName='password'
 					messageOnError='Password length must be 6 characters at least and only include letters and numbers'
 					validationFn={validatePassword}
-					onPasswordInput={updatePassword}
+					updateValueFn={updateValue}
 				/>
 				<Input
 					placeholder='Password confirm'
-					inputId='password-confirm'
+					inputId='password_confirm'
 					type='password'
 					inputLabel='Confirm password'
-					inputName='password-confirm'
+					inputName='password_confirm'
 					messageOnError='Password confirmation is not equal to password'
 					validationFn={validatePasswordConfirmation}
-					onPasswordInput={updatePasswordConfirm}
+					updateValueFn={updateValue}
 				/>
 				<Button>Submit</Button>
 			</form>
