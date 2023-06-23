@@ -1,70 +1,55 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import {
+	validateEmail,
+	validateName,
+	validatePasswordRules,
+} from '../../services/validation';
 import Input from '../Input/Input';
 import Button from '../Button/Button';
 
 type ValidInputTypes = string | number | null;
 
 export default function Form() {
-	// const [name, setName] = useState<ValidInputTypes>('');
-	// const [mail, setMail] = useState<ValidInputTypes>('');
-	// const [passwordValue, setPasswordValue] = useState<ValidInputTypes>('');
-	// const [passwordConfirmValue, setPasswordConfirmValue] = useState<ValidInputTypes>('');
-
-	const nameRef = useRef<ValidInputTypes>(null);
-	const mailRef = useRef<ValidInputTypes>(null);
+	const [isValidForm, setIsValidForm] = useState(false);
+	const [isValidName, setIsValidName] = useState(false);
+	const [isValidMail, setIsValidMail] = useState(false);
+	const [isValidPassword, setIsValidPassword] = useState(false);
+	const [isValidPasswordConfirm, setIsValidPasswordConfirm] = useState(false);
 	const passwordRef = useRef<ValidInputTypes>(null);
 	const passwordConfirmRef = useRef<ValidInputTypes>(null);
 
-	const updateValue = (inputValue: ValidInputTypes, inputName: string): void => {
-		// if (inputName === 'name') setName(inputValue);
-		// if (inputName === 'mail') setMail(inputValue);
-		// if (inputName === 'password') setPasswordValue(inputValue);
-		// if (inputName === 'passwordConfirm') setPasswordConfirmValue(inputValue)
-
-		if (inputName === 'name') nameRef.current = inputValue;
-		if (inputName === 'mail') mailRef.current = inputValue;
-		if (inputName === 'password') passwordRef.current = inputValue;
-		if (inputName === 'passwordConfirm') passwordConfirmRef.current = inputValue;
+	const updateFormValidation = (isValidInput: boolean, inputName: string): void => {
+		console.log({ isValidInput, inputName });
+		if (inputName === 'name') setIsValidName(isValidInput);
+		if (inputName === 'email') setIsValidMail(isValidInput);
+		if (inputName === 'password') setIsValidPassword(isValidInput);
+		if (inputName === 'password_confirm') setIsValidPasswordConfirm(isValidInput);
 	};
 
-	// const updatePassword = (passValue: string): void => {
-	// 	setPasswordValue(passValue);
-	// };
-
-	// const updatePasswordConfirm = (passConfirmValue: string): void => {
-	// 	setPasswordConfirmValue(passConfirmValue);
-	// };
-
-	const validateName = (name: string): boolean => {
-		return name.trim().length > 4;
+	const updatePassword = (passValue: string): void => {
+		if (passValue) passwordRef.current = passValue;
 	};
 
-	const validateEmail = (email: string): boolean => {
-		return email.includes('@');
+	const updatePasswordConfirm = (passConfirmValue: string): void => {
+		if (passConfirmValue) passwordConfirmRef.current = passConfirmValue;
 	};
+
+	useEffect(() => {
+		const valid =
+			isValidName && isValidMail && isValidPassword && isValidPasswordConfirm;
+
+		setIsValidForm(valid);
+	}, [isValidName, isValidMail, isValidPassword, isValidPasswordConfirm]);
 
 	const validatePassword = (password: string): boolean => {
-		const letters = 'abcdefghijklmnñopqrstuvwxyz';
-		const numbers = '1234567890';
-		const passwordAux = password.toLowerCase().split('');
-		let isValidChars = false;
-		let isValidNums = false;
-
-		passwordAux.forEach(item => {
-			if (letters.indexOf(item) >= 0) isValidChars = true;
-		});
-
-		passwordAux.forEach(item => {
-			if (numbers.indexOf(item) >= 0) isValidNums = true;
-		});
-
-		return password.length >= 6 && isValidChars && isValidNums;
+		let result = validatePasswordRules(password);
+		if (passwordConfirmRef.current)
+			result = result && password === passwordConfirmRef.current;
+		return result;
 	};
 
 	const validatePasswordConfirmation = (password: string): boolean => {
-		console.log({ passwordRef, passwordConfirmRef });
-
-		return validatePassword(password) && passwordRef.current === password;
+		return validatePasswordRules(password) && passwordRef.current === password;
 	};
 
 	const handleSubmitForm = (event: React.SyntheticEvent) => {
@@ -83,7 +68,7 @@ export default function Form() {
 					inputName='name'
 					messageOnError='Please enter a valid name'
 					validationFn={validateName}
-					updateValueFn={updateValue}
+					updateValueFn={updateFormValidation}
 				/>
 				<Input
 					placeholder='E-mail'
@@ -93,6 +78,7 @@ export default function Form() {
 					inputName='email'
 					messageOnError='Please enter a valid e-mail'
 					validationFn={validateEmail}
+					updateValueFn={updateFormValidation}
 				/>
 				<Input
 					placeholder='Password'
@@ -100,9 +86,10 @@ export default function Form() {
 					type='password'
 					inputLabel='Password'
 					inputName='password'
-					messageOnError='Password length must be 6 characters at least and only include letters and numbers'
+					messageOnError='Password length must be 6 characters at least and only include letters and numbers.'
 					validationFn={validatePassword}
-					updateValueFn={updateValue}
+					updateValueFn={updateFormValidation}
+					passwordInputUpdate={updatePassword}
 				/>
 				<Input
 					placeholder='Password confirm'
@@ -112,9 +99,10 @@ export default function Form() {
 					inputName='password_confirm'
 					messageOnError='Password confirmation is not equal to password'
 					validationFn={validatePasswordConfirmation}
-					updateValueFn={updateValue}
+					updateValueFn={updateFormValidation}
+					passwordInputUpdate={updatePasswordConfirm}
 				/>
-				<Button>Submit</Button>
+				<Button disabled={!isValidForm}>Submit</Button>
 			</form>
 		</section>
 	);

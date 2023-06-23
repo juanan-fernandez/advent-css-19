@@ -9,7 +9,8 @@ type InputProps = {
 	placeholder: string;
 	messageOnError: string;
 	validationFn?(inputVal: string | number | null | undefined): boolean;
-	updateValueFn?(inputVal: string | number | null, inputName: string): void;
+	updateValueFn?(inputValidity: boolean, inputName: string): void;
+	passwordInputUpdate?(inputVal: string | number | null | undefined): void;
 };
 
 //inputVal:
@@ -20,6 +21,7 @@ export default function Input(props: InputProps) {
 		placeholder,
 		validationFn,
 		updateValueFn,
+		passwordInputUpdate,
 		inputName,
 		inputId,
 		inputLabel,
@@ -44,11 +46,13 @@ export default function Input(props: InputProps) {
 
 	const validateInput = () => {
 		let validInput = true;
-
-		if (updateValueFn && typeof updateValueFn === 'function' && inputRef.current) {
-			updateValueFn(inputRef.current?.value, inputName);
+		if (
+			passwordInputUpdate &&
+			typeof passwordInputUpdate === 'function' &&
+			inputRef.current
+		) {
+			passwordInputUpdate(inputRef.current?.value);
 		}
-
 		if (validationFn && typeof validationFn === 'function') {
 			validInput =
 				type === 'number'
@@ -57,6 +61,9 @@ export default function Input(props: InputProps) {
 		}
 		setLostFocus(true);
 		setIsValid(validInput);
+		if (updateValueFn && typeof updateValueFn === 'function' && inputRef.current) {
+			updateValueFn(validInput, inputName);
+		}
 	};
 
 	const handleChange = () => {
